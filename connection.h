@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <string>
+using namespace std;
+#define MAXDATASIZE 100
+void *get_in_addr(struct sockaddr *sa)
+{
+    if (sa->sa_family == AF_INET)
+    {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
+    return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
+int get_socket(string host, string port)
+{
+    int sockfd, rv; 
+    struct addrinfo hints, *servinfo, *p;
+    char s[INET6_ADDRSTRLEN];
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    if ((rv = getaddrinfo(host.c_str(), port.c_str(),
+            &hints, &servinfo)) != 0)
+    {
+        perror("Can't find host information\n");
+        return -1;
+    }
+    for(p = servinfo; p != NULL; p = p->ai_next)
+    {
+        if ((sockfd = socket(p->ai_family, p->ai_socktype,
+                p->ai_protocol)) == -1)
+        {
+            perror("client: socket\n");
+            continue;
+        }
+        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1)
+        {
+            close(sockfd);
+            perror("client: connect\n");
+            continue;
+        }
+        break;
+    }
+    if (p == NULL)
+    {
+        perror("client: failed to connect\n");
+        return -1;
+    }
+    inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
+            s, sizeof s);
+    freeaddrinfo(servinfo);
+    return sockfd;
+}
+int send_message(int sockfd, string message)
+{
+    int numbytes;
+    int sentbytes = 0;
+    int message_length = message.length();
+    char buf[MAXDATASIZE];
+    while (message_length != sentbytes)
+    {
+        if ((numbytes = send(sockfd, message.c_str(),
+             strlen(message.c_str()), 0)) == -1)
+        {
+            perror("send");
+            return -1;
+        }
+        message = message.substr(numbytes, message.length());
+        sentbytes += numbytes;
+    }
+    numbytes = -1;
+    if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1)
+    {
+        perror("recv");
+        return -1;
+    }
+    buf[numbytes] = '\0';
+    return 0;
+}
