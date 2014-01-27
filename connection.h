@@ -76,12 +76,22 @@ int send_message(int sockfd, string message)
         message = message.substr(numbytes, message.length());
         sentbytes += numbytes;
     }
-    numbytes = -1;
-    if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1)
+}
+string get_response(int sockfd, int read_bytes)
+{
+    int numbytes;
+    char buff[read_bytes+1];
+    string empty_string = "";
+    if (read_bytes < 0)
     {
-        perror("recv");
-        return -1;
+        return empty_string;
     }
-    buf[numbytes] = '\0';
-    return 0;
+    if ((numbytes = recv(sockfd, buff, read_bytes, 0)) == -1)
+    {
+        perror("Unable to read from socket!");
+        return empty_string;
+    }
+    buff[read_bytes+1] = '\0';
+    string data = buff;
+    return data;
 }
