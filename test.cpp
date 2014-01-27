@@ -1,8 +1,10 @@
 #include "connection.h"
 #include <string>
+#include <iostream>
 using namespace std;
 int main(int argc, char* argv[])
 {
+    string data;
     int sockfd;
     if ((sockfd = get_socket(argv[1], argv[2])) == -1)
     {
@@ -11,5 +13,7 @@ int main(int argc, char* argv[])
     }
     string message = "*3\r\n$3\r\nSET\r\n$3\r\nFOO\r\n$3\r\neee\r\n";
     send_message(sockfd, message);
+    data = get_response(sockfd, 100);
     close(sockfd);
+    cout << data << endl;
 }
