@@ -11,87 +11,90 @@
 #include <string>
 using namespace std;
 #define MAXDATASIZE 100
-void *get_in_addr(struct sockaddr *sa)
+namespace redis
 {
-    if (sa->sa_family == AF_INET)
+    void *get_in_addr(struct sockaddr *sa)
     {
-        return &(((struct sockaddr_in*)sa)->sin_addr);
-    }
-    return &(((struct sockaddr_in6*)sa)->sin6_addr);
-}
-int get_socket(string host, string port)
-{
-    int sockfd, rv; 
-    struct addrinfo hints, *servinfo, *p;
-    char s[INET6_ADDRSTRLEN];
-    memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-    if ((rv = getaddrinfo(host.c_str(), port.c_str(),
-            &hints, &servinfo)) != 0)
-    {
-        perror("Can't find host information\n");
-        return -1;
-    }
-    for(p = servinfo; p != NULL; p = p->ai_next)
-    {
-        if ((sockfd = socket(p->ai_family, p->ai_socktype,
-                p->ai_protocol)) == -1)
+        if (sa->sa_family == AF_INET)
         {
-            perror("client: socket\n");
-            continue;
+            return &(((struct sockaddr_in*)sa)->sin_addr);
         }
-        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1)
-        {
-            close(sockfd);
-            perror("client: connect\n");
-            continue;
-        }
-        break;
+        return &(((struct sockaddr_in6*)sa)->sin6_addr);
     }
-    if (p == NULL)
+    int get_socket(string host, string port)
     {
-        perror("client: failed to connect\n");
-        return -1;
-    }
-    inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
-            s, sizeof s);
-    freeaddrinfo(servinfo);
-    return sockfd;
-}
-int send_message(int sockfd, string message)
-{
-    int numbytes;
-    int sentbytes = 0;
-    int message_length = message.length();
-    char buf[MAXDATASIZE];
-    while (message_length != sentbytes)
-    {
-        if ((numbytes = send(sockfd, message.c_str(),
-             strlen(message.c_str()), 0)) == -1)
+        int sockfd, rv; 
+        struct addrinfo hints, *servinfo, *p;
+        char s[INET6_ADDRSTRLEN];
+        memset(&hints, 0, sizeof hints);
+        hints.ai_family = AF_UNSPEC;
+        hints.ai_socktype = SOCK_STREAM;
+        if ((rv = getaddrinfo(host.c_str(), port.c_str(),
+                &hints, &servinfo)) != 0)
         {
-            perror("send");
+            perror("Can't find host information\n");
             return -1;
         }
-        message = message.substr(numbytes, message.length());
-        sentbytes += numbytes;
+        for(p = servinfo; p != NULL; p = p->ai_next)
+        {
+            if ((sockfd = socket(p->ai_family, p->ai_socktype,
+                    p->ai_protocol)) == -1)
+            {
+                perror("client: socket\n");
+                continue;
+            }
+            if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1)
+            {
+                close(sockfd);
+                perror("client: connect\n");
+                continue;
+            }
+            break;
+        }
+        if (p == NULL)
+        {
+            perror("client: failed to connect\n");
+            return -1;
+        }
+        inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
+                  s, sizeof s);
+        freeaddrinfo(servinfo);
+        return sockfd;
     }
-}
-string get_response(int sockfd, int read_bytes)
-{
-    int numbytes;
-    char buff[read_bytes+1];
-    string empty_string = "";
-    if (read_bytes < 0)
+    int send_message(int sockfd, string message)
     {
-        return empty_string;
+        int numbytes;
+        int sentbytes = 0;
+        int message_length = message.length();
+        char buf[MAXDATASIZE];
+        while (message_length != sentbytes)
+        {
+            if ((numbytes = send(sockfd, message.c_str(),
+                 strlen(message.c_str()), 0)) == -1)
+            {
+                perror("send");
+                return -1;
+            }
+            message = message.substr(numbytes, message.length());
+            sentbytes += numbytes;
+        }
     }
-    if ((numbytes = recv(sockfd, buff, read_bytes, 0)) == -1)
+    string get_response(int sockfd, int read_bytes)
     {
-        perror("Unable to read from socket!");
-        return empty_string;
+        int numbytes;
+        char buff[read_bytes+1];
+        string empty_string = "";
+        if (read_bytes < 0)
+        {
+            return empty_string;
+        }
+        if ((numbytes = recv(sockfd, buff, read_bytes, 0)) == -1)
+        {
+            perror("Unable to read from socket!");
+            return empty_string;
+        }
+        buff[read_bytes+1] = '\0';
+        string data = buff;
+        return data;
     }
-    buff[read_bytes+1] = '\0';
-    string data = buff;
-    return data;
 }

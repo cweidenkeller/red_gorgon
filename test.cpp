@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 using namespace std;
+using namespace redis;
 int main(int argc, char* argv[])
 {
     string data;
