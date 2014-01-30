@@ -1,3 +1,4 @@
+#include "connection.h"
 #include<string>
 #include<fstream>
 #include<iostream>
@@ -40,20 +41,24 @@ namespace redis
                                        "\r\n" + _config_command + "\r\n";
                     _config_set = "*4" + formatted_config + "$3\r\nSET\r\n";
                     _config_get = "*3" + formatted_config + "$3\r\nGET\r\n";
-                    _config_rewrite = "*2" + formatted_config +
+                    _config_rewrite = "*2" + formatted_config + 
                                       "$7\r\nREWRITE\r\n";
                 }
                 else
                 {
                     _config_set = "*4\r\n$6\r\nCONFIG\r\n$3\r\nSET\r\n";
                     _config_get = "*3\r\n$6\r\nCONFIG\r\n$3\r\nGET\r\n";
-                    _config_rewrite = "*2\r\n$6\r\nCONFIG\r\n" +
+                    _config_rewrite = "*2\r\n$6\r\nCONFIG\r\n" 
                                       "$7\r\nREWRITE\r\n";
                 }
             }
             string find_config_command()
             {
                 return "config_command";
+            }
+            string find_password()
+            {
+                return "password";
             }
         public:
             Commands()
@@ -98,16 +103,48 @@ namespace redis
             {
                 return _last_save;
             }
-            string client_set_name()
+            string client_set_name(string client_name)
             {
-                return _client_set_name;
+                return _client_set_name + "$" +
+                       to_string(client_name.length()) +
+                       "\r\n" + client_name + "\r\n";
             }
     };
     class RedisClient
     {
         private:
-        int port;
-        string host;
-        Commands commands;
+            int socket;
+            string _port;
+            string _host;
+            string _client_name;
+            Commands commands;
+            int set_client(int sockfd)
+            {
+                int res;
+                if (send_message(sockfd,
+                    commands.client_set_name(_client_name)) == -1)
+                {
+                    return -1;
+                }
+                if (
+            }
+        public:
+            RedisClient(string host, string port, string client_name)
+            {
+                _host = host;
+                _port = port;
+                _client_name = client_name;
+            }
+            int ping()
+            {
+                int res;
+                int sockfd;
+                if ((sockfd = get_socket(_host, _port)) == -1)
+                {
+                    return -1;
+                }
+            }
+
     };
 }
+

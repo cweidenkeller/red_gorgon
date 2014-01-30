@@ -1,4 +1,5 @@
 #include "connection.h"
+#include "redis.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -17,4 +18,8 @@ int main(int argc, char* argv[])
     data = get_response(sockfd, 100);
     close(sockfd);
     cout << data << endl;
+    Commands commands = Commands();
+    cout << commands.ping();
+    cout << commands.config_get("foo");
+    cout << commands.config_set("fooasdf", "barasdfff");
 }
