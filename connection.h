@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <string>
+#include <iostream>
 using namespace std;
 #define MAXDATASIZE 100
 namespace redis
@@ -94,7 +95,7 @@ namespace redis
             return empty_string;
         }
         buff[read_bytes+1] = '\0';
-        string data = buff;
+        string data(buff);
         return data;
     }
 }

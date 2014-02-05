@@ -1,25 +1,33 @@
-#include "connection.h"
 #include "redis.h"
 #include <string>
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 using namespace redis;
 int main(int argc, char* argv[])
 {
-    string data;
-    int sockfd;
-    if ((sockfd = get_socket(argv[1], argv[2])) == -1)
-    {
-        perror("socket error.");
-        return -1;
-    }
-    string message = "*3\r\n$3\r\nSET\r\n$3\r\nFOO\r\n$3\r\neee\r\n";
-    send_message(sockfd, message);
-    data = get_response(sockfd, 100);
-    close(sockfd);
-    cout << data << endl;
-    Commands commands = Commands();
-    cout << commands.ping();
-    cout << commands.config_get("foo");
-    cout << commands.config_set("fooasdf", "barasdfff");
+    RedisClient client = RedisClient("localhost", "6379", "conrad");
+    redis_response res = client.ping();
+    sleep(2);
+    //cout << res.status << endl<< res.data << endl;
+    res = client.bgsave();
+    sleep(2);
+    //cout << res.status << endl<< res.data << endl;
+    res = client.save();
+    sleep(2);
+    //cout << res.status << endl<< res.data << endl;
+    sleep(2);
+    res = client.last_save();
+    //cout << res.status << endl<< res.data << endl;
+    sleep(2);
+    res = client.config_get("requirepass");
+    //cout << res.status << endl<< res.data << endl;
+    sleep(2);
+    res = client.config_set("requirepass", "password");
+    //cout << res.status << endl<< res.data << endl;
+    sleep(2);
+    res = client.config_rewrite();
+    //cout << res.status << endl<< res.data << endl;
+
+
 }
