@@ -10,7 +10,7 @@ namespace redis
     static const string INTEGER_RESPONSE = ":";
     static const string INTEGER_DESCRIPTION = "Integer.";
     static const string MULTIPART_RESPONSE = "*";
-    static const string MULTIPART_DESCRIPTION = "Multipart string response.'
+    static const string MULTIPART_DESCRIPTION = "Multipart string response.";
     static const string CERROR_RESPONSE = "cerror";
     static const string CERROR_DESCRIPTION = "Client error.";
     static const string UNSUPPORTED_RESPONSE = "unsupported";

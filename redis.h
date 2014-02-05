@@ -82,6 +82,12 @@ namespace redis
         ss << number;
         return ss.str();
     }
+    int to_int(string number)
+    {
+        int num;
+        istringstream(number) >> num;
+        return num;
+    }
     class Commands
     {
         private:
@@ -236,6 +242,12 @@ namespace redis
              * This method accepts an integer to an active socket file
              * descriptor.
              */
+                int multi_args = 0;
+                int multi_len = 0;
+                string tmp_byte = "";
+                string tmp_multi = "";
+                string tmp_multi_len = "";
+                string multi_data = "";
                 int retries = 0;
                 string first_byte;
                 string response = "";
@@ -284,13 +296,61 @@ namespace redis
                     {
                         return redis_response(SERROR_RESPONSE, "");
                     }
-                    return redis_response(first_byte, response);
+                    return redis_response(first_byte,
+                                          response.substr(
+                                              0, 
+                                              response.length() - 2));
                 }
                 else if (first_byte == MULTIPART_RESPONSE)
                 {
-                    return redis_response(UNSUPPORTED_RESPONSE, response);
+                    while (true)
+                    {
+                        tmp_byte = get_response(_socket, 1);
+                        if (tmp_byte == "\r")
+                        {
+                            get_response(_socket, 2);
+                            multi_args = to_int(tmp_multi);
+                            tmp_byte = "";
+                            break;
+                        }
+                        tmp_multi += tmp_byte;
+                    }
+                    while (multi_args != 0)
+                    {
+                        tmp_multi_len = "";
+                        while (true)
+                        {
+                            if (tmp_byte == "\r")
+                            {
+                                get_response(_socket, 1);
+                                tmp_byte = "";
+                                multi_len = to_int(tmp_multi_len);
+                                break;
+                            }
+                            tmp_byte = get_response(_socket, 1);
+                            tmp_multi_len += tmp_byte;
+                        }
+                        multi_data += get_response(_socket,
+                                                   multi_len);
+                        if (multi_args != 1)
+                        {
+                            multi_data += " ";
+                            get_response(_socket,
+                                         3);
+                        }
+                        else
+                        { 
+                            get_response(_socket, 2);
+                        }
+                        --multi_args;
+                    }
+                    return redis_response(MULTIPART_RESPONSE,
+                                          multi_data);   
                 }
-                
+                else
+                {
+                    return redis_response(UNSUPPORTED_RESPONSE, "");
+                }
             }
             redis_response _set_client()
             {
