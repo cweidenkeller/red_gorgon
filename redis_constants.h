@@ -9,6 +9,8 @@ namespace redis
     static const string ERROR_DESCRIPTION = "Error.";
     static const string INTEGER_RESPONSE = ":";
     static const string INTEGER_DESCRIPTION = "Integer.";
+    static const string MULTIPART_RESPONSE = "*";
+    static const string MULTIPART_DESCRIPTION = "Multipart string response.'
     static const string CERROR_RESPONSE = "cerror";
     static const string CERROR_DESCRIPTION = "Client error.";
     static const string UNSUPPORTED_RESPONSE = "unsupported";
@@ -33,9 +35,9 @@ namespace redis
     static const string CRLF = "\r\n";
     static const int CRLF_LEN = 2;
     static const int SOCK_ERROR = -1;
-    static const int MAX_RETRIES = 1;
+    static const int MAX_RETRIES = 100;
     static const int FIRST_BYTE_READ = 1;
-    static const int READ_LEN = 20;
+    static const int READ_LEN = 2048;
     static const string AUTH_COMMAND = "*2\r\n$4\r\nAUTH\r\n";
     static const string PING_COMMAND = "*1\r\n$4\r\nPING\r\n";
     static const string BGSAVE_COMMAND = "*1\r\n$6\r\nBGSAVE\r\n";

@@ -25,9 +25,13 @@ namespace redis
             {
                 description = ERROR_DESCRIPTION;
             }
-            else if(_status == INTEGER_RESPONSE)
+            else if (_status == INTEGER_RESPONSE)
             {
                 description = INTEGER_DESCRIPTION;
+            }
+            else if (_status == MULTIPART_RESPONSE)
+            {
+                description = MULTIPART_DESCRIPTION;
             }
             else if (_status == CERROR_RESPONSE)
             {
@@ -246,7 +250,6 @@ namespace redis
                         return redis_response(CTIMEOUT_RESPONSE, "");
                     }
                     first_byte = get_response(_socket, FIRST_BYTE_READ);
-                    cout << first_byte <<endl;
                     if (first_byte.length() > 0)
                     {
                         break;
@@ -259,20 +262,19 @@ namespace redis
                     first_byte == INTEGER_RESPONSE)
                 {
                     while (true)
-                    {
+                    {                        
                         if (retries == MAX_RETRIES)
                         {
                            return redis_response(CTIMEOUT_RESPONSE, "");
                         }
                         response += get_response(_socket, READ_LEN);
-                        //cout << response << endl;
                         if (response.length() == 0)
                         {
                             ++retries;
                             continue;
                         }
-                        if (response.substr(response.length() - CRLF_LEN) == 
-                            CRLF)
+                        if (response.substr(response.length() - CRLF_LEN) ==
+                           CRLF)
                         {
                             break;
                         }
@@ -284,7 +286,7 @@ namespace redis
                     }
                     return redis_response(first_byte, response);
                 }
-                else
+                else if (first_byte == MULTIPART_RESPONSE)
                 {
                     return redis_response(UNSUPPORTED_RESPONSE, response);
                 }
@@ -376,10 +378,8 @@ namespace redis
                 _name_set = false;
                 _socket = -1;
                 _connect();
-                _auth();
-                sleep(1);
-                _set_client();
-                sleep(1);
+                redis_response res = _auth();
+                res = _set_client();
             }
             ~RedisClient()
             {
