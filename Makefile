@@ -1,2 +1,4 @@
-all: redis.h  redis_constants.h  connection.h  test.cpp 
-	g++ redis.h  redis_constants.h  connection.h  test.cpp -o out
+OBJS = redis.h redis_constants.h redis_commands.h redis_response.h \
+       connection.h common.h test.cpp
+all: $(OBJS) 
+	g++ test.cpp -o out

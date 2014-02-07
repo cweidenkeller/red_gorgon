@@ -1,7 +1,6 @@
 #include "redis.h"
 #include <string>
 #include <iostream>
-#include <unistd.h>
 using namespace std;
 using namespace redis;
 int main(int argc, char* argv[])
