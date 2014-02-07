@@ -163,9 +163,9 @@ namespace redis
     static const string CLIENT_BUFFER_LIMIT_SOFT_LIMIT = "soft_limit";
     static const string CLIENT_BUFFER_LIMIT_SOFT_SECONDS = "soft_seconds";
     //Memory units.
-    static const string kilobytes = "kb";
-    static const string megabytes = "mb";
-    static const string gigabytes = "gb";
+    static const string KILOBYTES = "kb";
+    static const string MEGABYTES = "mb";
+    static const string GIGABYTES = "gb";
     //Redis key command names.
     static const string COMMAND_DEL = "DEL";
     static const string COMMAND_DUMP = "DUMP";
