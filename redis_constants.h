@@ -83,7 +83,7 @@ namespace redis
     static const string MASTER_AUTH = "masterauth";
     static const string SLAVE_SERVER_STALE_DATA = "slave-serve-stale-data";
     static const string SLAVE_READ_ONLY = "slave-read-only";
-    static const string REPL_PING_SLAVE_PERIOD = "repl-ping-slave-peroid";
+    static const string REPL_PING_SLAVE_PERIOD = "repl-ping-slave-period";
     static const string REPL_TIMEOUT = "repl-timeout";
     static const string REPL_DISABLE_TCP_NODELAY = "repl-disable-tcp-nodelay";
     static const string REPL_BACKLOG_SIZE = "repl-backlog-size";
@@ -128,6 +128,17 @@ namespace redis
     static const string HZ = "hz";
     static const string AOF_REWRITE_INCREMENTAL_FSYNC = "aof-rewrite-"
                                                         "incremental-fsync";
+    //Config value types.
+    static const string TYPE_STRING = "string";
+    static const string TYPE_INT = "int";
+    static const string TYPE_MEMORY = "memory";
+    static const string TYPE_BYTES = "bytes";
+    static const string TYPE_KILOBYTES = "kilobytes":
+    static const string TYPE_MEGABYTES = "megabytes":
+    static const string TYPE_GIGABYTES = "gigabytes";
+    static const string TYPE_BOOL = "bool";
+    static const string TYPE_TRUE = "yes";
+    static const string TYPE_FALSE = "no";
     //Save keys.
     static const string SAVE_SECONDS = "seconds";
     static const string SAVE_CHANGES = "changes";
