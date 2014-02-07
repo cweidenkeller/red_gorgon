@@ -66,7 +66,6 @@ namespace redis
         int numbytes;
         int sentbytes = 0;
         int message_length = message.length();
-        char buf[MAXDATASIZE];
         while (message_length != sentbytes)
         {
             if ((numbytes = send(sockfd, message.c_str(),
@@ -78,6 +77,7 @@ namespace redis
             message = message.substr(numbytes, message.length());
             sentbytes += numbytes;
         }
+        return sentbytes;
     }
     string get_response(int sockfd, int read_bytes)
     {

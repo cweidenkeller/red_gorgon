@@ -192,8 +192,7 @@ namespace redis
                     }
                     return res;
                 }
-                redis_response res = 
-                    redis_response(CNOTHING_TO_DO_RESPONSE, "");
+                return redis_response(CNOTHING_TO_DO_RESPONSE, "");
             }
             redis_response _auth()
             {
