@@ -197,7 +197,7 @@ namespace redis
     static const string COMMAND_GET = "GET";
     static const string COMMAND_GET_BIT = "GETGIT";
     static const string COMMAND_GET_RANGE = "GETRANGE";
-    static const string COMMAND_GET_SET = "GETSET"'
+    static const string COMMAND_GET_SET = "GETSET";
     static const string COMMAND_INCR = "INCR";
     static const string COMMAND_INCR_BY = "INCRBY";
     static const string COMMAND_INCR_BY_FLOAT = "INCRBYFLOAT";
