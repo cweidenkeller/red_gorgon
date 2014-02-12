@@ -64,7 +64,7 @@ namespace redis
     static const string TCP_BACKLOG = "tcp-backlog";
     static const string BIND_ADDR = "bind";
     static const string UNIX_SOCKET = "unixsocket";
-    static const string UNIX_SOCKET_PERMISSION "unixsocketperm";
+    static const string UNIX_SOCKET_PERMISSION = "unixsocketperm";
     static const string TCP_KEEPALIVE = "tcp-keepalive";
     static const string LOG_LEVEL = "loglevel";
     static const string LOG_FILE = "logfile";
@@ -81,7 +81,7 @@ namespace redis
     static const string DB_DIR = "dir";
     static const string SLAVE_OF = "slaveof";
     static const string MASTER_AUTH = "masterauth";
-    static const string SLAVE_SERVER_STALE_DATA = "slave-serve-stale-data";
+    static const string SLAVE_SERVE_STALE_DATA = "slave-serve-stale-data";
     static const string SLAVE_READ_ONLY = "slave-read-only";
     static const string REPL_PING_SLAVE_PERIOD = "repl-ping-slave-period";
     static const string REPL_TIMEOUT = "repl-timeout";
@@ -107,9 +107,9 @@ namespace redis
     static const string AUTO_AOF_REWRITE_MIN_SIZE = "auto-aof-rewrite-"
                                                     "min-size";
     static const string LUA_TIME_LIMIT = "lua-time-limit";
-    static const string SLOW_LOG_LOG_SLOWER_THAN = "slowlog-log-slower-"
+    static const string SLOWLOG_LOG_SLOWER_THAN = "slowlog-log-slower-"
                                                     "than";
-    static const string SLOW_LOG_MAX_LEN = "slowlog-max-len";
+    static const string SLOWLOG_MAX_LEN = "slowlog-max-len";
     static const string NOTIFY_KEYSPACE_EVENTS = "notify-keyspace-events";
     static const string HASH_MAX_ZIP_LIST_ENTRIES = "hash-max-ziplist-"
                                                     "entries";
@@ -133,8 +133,8 @@ namespace redis
     static const string TYPE_INT = "int";
     static const string TYPE_MEMORY = "memory";
     static const string TYPE_BYTES = "bytes";
-    static const string TYPE_KILOBYTES = "kilobytes":
-    static const string TYPE_MEGABYTES = "megabytes":
+    static const string TYPE_KILOBYTES = "kilobytes";
+    static const string TYPE_MEGABYTES = "megabytes";
     static const string TYPE_GIGABYTES = "gigabytes";
     static const string TYPE_BOOL = "bool";
     static const string TYPE_TRUE = "yes";
