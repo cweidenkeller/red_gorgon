@@ -1,4 +1,5 @@
 #include <map>
+#include <vector>
 #include <fsream>
 namespace redis
 {
@@ -8,10 +9,10 @@ namespace redis
             map<string, string>_options;
             vector<string> _include;
             vector<string> _bind_addrs;
-            vector<map<string, string>> _save;
+            vector<map <string, string> > _save;
             map<string, string> _slave_of;
-            vector<map<string, string> _renamed_commands;
-            vector<map<string, string> _client_output_buffer_limit;
+            vector<map <string, string> > _renamed_commands;
+            vector<map <string, string> > _client_output_buffer_limit;
             string _get_string_value(string key)
             {
                 if (options.count(key) > 0)
@@ -44,6 +45,10 @@ namespace redis
                 return NULL;
             }
         public:
+            RedisConfig(string path)
+            {
+                
+            }
             vector<string> get_include_files()
             {
                 return _include;
@@ -104,7 +109,7 @@ namespace redis
             {
                 return _get_int_value(DATABASES);
             }
-            vector<map<string, string>> get_save_intervals()
+            vector<map <string, string> > get_save_intervals()
             {
                 return _save;
             }
@@ -180,7 +185,7 @@ namespace redis
             {
                 return _get_string_value(REQUIRE_PASS);
             }
-            vector<map<string, string>get_renamed_commands()
+            vector<map <string, string> >get_renamed_commands()
             {
                 return _renamed_commands;
             }
@@ -272,7 +277,7 @@ namespace redis
             {
                 return _get_bool_value(ACTIVE_REHASHING);
             }
-            vector<map<string,string> get_client_output_buffer_limit()
+            vector<map <string, string> >get_client_output_buffer_limit()
             {
                 return _client_output_buffer_limit;
             }
