@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 using namespace std;
-using namespace redis;
+using namespace nova::redis;
 int main(int argc, char* argv[])
 {
     RedisClient client = RedisClient("localhost", "6379", "conrad");

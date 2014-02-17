@@ -1,17 +1,7 @@
 #include <string>
-using namespace std;
-namespace redis
-{
-    string to_string(int number)
-    {
-        stringstream ss;
-        ss << number;
-        return ss.str();
-    }
-    int to_int(string number)
-    {
-        int num;
-        istringstream(number) >> num;
-        return num;
-    }
-}
+#include <sstream>
+#include "common.cc"
+namespace nova { namespace redis {
+std::string to_string(int number);
+int to_int(std::string number);
+}}//end nova::redis namespace.
