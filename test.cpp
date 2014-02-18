@@ -6,7 +6,7 @@ using namespace nova::redis;
 int main(int argc, char* argv[])
 {
     Client client = Client("localhost", "6379", "conrad");
-    redis_response res = client.ping();
+    response res = client.ping();
     cout << res.status << " || "<< res.data << endl;
     res = client.bgsave();
     cout << res.status << " || "<< res.data << endl;

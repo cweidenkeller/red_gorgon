@@ -64,7 +64,8 @@ class Config
                 iss >> value;
                 if(value == INCLUDE_FILE)
                 {
-                    _include.push_back(iss.str());
+                    iss >> value;
+                    _include.push_back(value);
                 }
                 else if(value == BIND_ADDR)
                 {
