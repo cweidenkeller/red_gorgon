@@ -1,11 +1,13 @@
 #include <string>
 #include "common.h"
 #include "connection.h"
-#include "redis_constants.h"
-#include "redis_response.h"
-#include "redis_commands.h"
+#include "constants.h"
+#include "response.h"
+#include "commands.h"
+#include "control.h"
+#include "config.h"
 namespace nova { namespace redis {
-class RedisClient
+class Client
 {
     private:
         bool _authed;
@@ -15,7 +17,7 @@ class RedisClient
         std::string _host;
         std::string _client_name;
         Commands _commands;
-        redis_response _connect()
+        response _connect()
         {
             int retries = 0;
             while (retries <= MAX_RETRIES)
@@ -29,16 +31,16 @@ class RedisClient
             }
             if (_socket >= 0)
             {
-                return redis_response(CCONNECTED_RESPONSE, "");
+                return response(CCONNECTED_RESPONSE, "");
             }
-            return redis_response(CCONNECTION_ERR_RESPONSE, "");
+            return response(CCONNECTION_ERR_RESPONSE, "");
         }
-        redis_response _send_redis_message(std::string message)
+        response _send_redis_message(std::string message)
         {
             int sres = 0;
             if (_socket < 0)
             {
-                redis_response res = _connect();
+                response res = _connect();
                 if (res.status != CCONNECTED_RESPONSE)
                 {
                     return res;
@@ -47,11 +49,11 @@ class RedisClient
             sres = send_message(_socket, message);
             if (sres == SOCK_ERROR)
             {
-                return redis_response(STIMEOUT_RESPONSE, "");
+                return response(STIMEOUT_RESPONSE, "");
             }
-            return redis_response(CMESSAGE_SENT_RESPONSE, "");
+            return response(CMESSAGE_SENT_RESPONSE, "");
         }
-        redis_response _get_redis_response()
+        response _get_redis_response()
         {
         /*
             * Determine the response type from the redis server and return
@@ -71,13 +73,13 @@ class RedisClient
             std::string response = "";
             if (_socket < 0)
             {
-                return redis_response(STIMEOUT_DESCRIPTION, "");
+                return response(STIMEOUT_DESCRIPTION, "");
             }
             while (true)
             {
                 if (retries == MAX_RETRIES)
                 {
-                    return redis_response(CTIMEOUT_RESPONSE, "");
+                    return response(CTIMEOUT_RESPONSE, "");
                 }
                 first_byte = get_response(_socket, FIRST_BYTE_READ);
                 if (first_byte.length() > 0)
@@ -95,7 +97,7 @@ class RedisClient
                 {                        
                     if (retries == MAX_RETRIES)
                     {
-                        return redis_response(CTIMEOUT_RESPONSE, "");
+                        return response(CTIMEOUT_RESPONSE, "");
                     }
                     response += get_response(_socket, READ_LEN);
                     if (response.length() == 0)
@@ -112,9 +114,9 @@ class RedisClient
                 }
                 if (response.substr(response.length() - CRLF_LEN) != CRLF)
                 {
-                    return redis_response(SERROR_RESPONSE, "");
+                    return response(SERROR_RESPONSE, "");
                 }
-                return redis_response(first_byte,
+                return response(first_byte,
                                         response.substr(
                                             0, 
                                             response.length() - 2));
@@ -162,19 +164,19 @@ class RedisClient
                     }
                     --multi_args;
                 }
-                return redis_response(MULTIPART_RESPONSE,
+                return response(MULTIPART_RESPONSE,
                                         multi_data);   
             }
             else
             {
-                return redis_response(UNSUPPORTED_RESPONSE, "");
+                return response(UNSUPPORTED_RESPONSE, "");
             }
         }
-        redis_response _set_client()
+        response _set_client()
         {
             if (!_name_set)
             {
-                redis_response res = _send_redis_message(
+                response res = _send_redis_message(
                     _commands.client_set_name(_client_name));
                 if (res.status != CMESSAGE_SENT_RESPONSE)
                 {
@@ -187,13 +189,13 @@ class RedisClient
                 }
                 return res;
             }
-            return redis_response(CNOTHING_TO_DO_RESPONSE, "");
+            return response(CNOTHING_TO_DO_RESPONSE, "");
         }
-        redis_response _auth()
+        response _auth()
         {
             if (_commands.password.length() > 0 && !_authed)
             {
-                redis_response res = _send_redis_message(_commands.auth());
+                response res = _send_redis_message(_commands.auth());
                 if (res.status != CMESSAGE_SENT_RESPONSE)
                 {
                     return res;
@@ -220,15 +222,15 @@ class RedisClient
                 return res;
             }
             _authed = true;
-            return redis_response(CNOTHING_TO_DO_RESPONSE, "");
+            return response(CNOTHING_TO_DO_RESPONSE, "");
         }
-        redis_response _reconnect()
+        response _reconnect()
         {
             close(_socket);
             _authed = false;
             _name_set = false;
             _socket = -1;
-            redis_response res = _connect();
+            response res = _connect();
             if (res.status != CCONNECTED_RESPONSE)
             {
                 return res;
@@ -243,10 +245,10 @@ class RedisClient
             {
                 return res;
             }
-            return redis_response(CCONNECTED_RESPONSE, "");
+            return response(CCONNECTED_RESPONSE, "");
         }
     public:
-        RedisClient(std::string host, std::string port, std::string client_name)
+        Client(std::string host, std::string port, std::string client_name)
         {
             _host = host;
             _port = port;
@@ -255,43 +257,43 @@ class RedisClient
             _name_set = false;
             _socket = -1;
             _connect();
-            redis_response res = _auth();
+            response res = _auth();
             res = _set_client();
         }
-        ~RedisClient()
+        ~Client()
         {
             close(_socket);
         }
-        redis_response ping()
+        response ping()
         {
-            redis_response res = _send_redis_message(_commands.ping());
+            response res = _send_redis_message(_commands.ping());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
             }
             return _get_redis_response();
         }
-        redis_response bgsave()
+        response bgsave()
         {
-            redis_response res = _send_redis_message(_commands.bgsave());
+            response res = _send_redis_message(_commands.bgsave());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
             }
             return _get_redis_response();
         }
-        redis_response save()
+        response save()
         {
-            redis_response res = _send_redis_message(_commands.save());
+            response res = _send_redis_message(_commands.save());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
             }
             return _get_redis_response();
         }
-        redis_response last_save()
+        response last_save()
         {
-            redis_response res = _send_redis_message(
+            response res = _send_redis_message(
                 _commands.last_save());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
@@ -299,9 +301,9 @@ class RedisClient
             }
             return _get_redis_response();
         }
-        redis_response config_get(std::string name)
+        response config_get(std::string name)
         {
-            redis_response res = _send_redis_message(
+            response res = _send_redis_message(
                 _commands.config_get(name));
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
@@ -309,9 +311,9 @@ class RedisClient
             }
             return _get_redis_response();
         }
-        redis_response config_set(std::string name, std::string value)
+        response config_set(std::string name, std::string value)
         {
-            redis_response res = _send_redis_message(
+            response res = _send_redis_message(
                 _commands.config_set(name, value));
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
@@ -319,9 +321,9 @@ class RedisClient
             }
             return _get_redis_response();
         }
-        redis_response config_rewrite()
+        response config_rewrite()
         {
-            redis_response res = _send_redis_message(
+            response res = _send_redis_message(
                 _commands.config_rewrite());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {

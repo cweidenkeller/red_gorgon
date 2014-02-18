@@ -1,5 +1,4 @@
 namespace nova { namespace redis {
-
 namespace {
     void *get_in_addr(sockaddr *sa)
     {

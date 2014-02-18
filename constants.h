@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 namespace nova { namespace redis {
 //Redis responses.
 static const std::string STRING_RESPONSE = "+";
@@ -38,6 +39,9 @@ static const int SOCK_ERROR = -1;
 static const int MAX_RETRIES = 100;
 static const int FIRST_BYTE_READ = 1;
 static const int READ_LEN = 2048;
+//This is bad but it is a value that is never used by redis.
+//So it means the item does not exist in the vector.
+static const int INT_NULL = -42;
 //Marked up commands.
 static const std::string AUTH_COMMAND = "*2\r\n$4\r\nAUTH\r\n";
 static const std::string PING_COMMAND = "*1\r\n$4\r\nPING\r\n";
@@ -111,7 +115,7 @@ static const std::string SLOWLOG_MAX_LEN = "slowlog-max-len";
 static const std::string NOTIFY_KEYSPACE_EVENTS = "notify-keyspace-events";
 static const std::string HASH_MAX_ZIP_LIST_ENTRIES = "hash-max-ziplist-"
                                                         "entries";
-static const std::string HAS_MAX_ZIP_LIST_VAULE = "hash-max-ziplist-"
+static const std::string HASH_MAX_ZIP_LIST_VALUE = "hash-max-ziplist-"
                                                     "value";
 static const std::string LIST_MAX_ZIP_LIST_ENTRIES = "list-max-ziplist-"
                                                         "entries";
@@ -335,4 +339,70 @@ static const std::string COMMAND_SLAVEOF = "SLAVEOF";
 static const std::string COMMAND_SLOWLOG = "SLOWLOG";
 static const std::string COMMAND_SYNC = "SYNC";
 static const std::string COMMAND_TIME = "TIME";
+//Vector for config file parsing. I could probably do this better.
+std::vector<std::string>get_config_key_vector()
+{
+    std::vector<std::string> config_keys;
+    config_keys.push_back(INCLUDE_FILE);
+    config_keys.push_back(DAEMONIZE);
+    config_keys.push_back(PIDFILE);
+    config_keys.push_back(PORT);
+    config_keys.push_back(TCP_BACKLOG);
+    config_keys.push_back(BIND_ADDR);
+    config_keys.push_back(UNIX_SOCKET);
+    config_keys.push_back(UNIX_SOCKET_PERMISSION);
+    config_keys.push_back(TCP_KEEPALIVE);
+    config_keys.push_back(LOG_LEVEL);
+    config_keys.push_back(LOG_FILE);
+    config_keys.push_back(SYSLOG);
+    config_keys.push_back(SYSLOG_IDENT);
+    config_keys.push_back(SYSLOG_FACILITY);
+    config_keys.push_back(DATABASES);
+    config_keys.push_back(SAVE);
+    config_keys.push_back(STOP_WRITES_ON_BGSAVE_ERROR);
+    config_keys.push_back(RDB_COMPRESSION);
+    config_keys.push_back(RDB_CHECKSUM);
+    config_keys.push_back(DB_FILENAME);
+    config_keys.push_back(DB_DIR);
+    config_keys.push_back(SLAVE_OF);
+    config_keys.push_back(MASTER_AUTH);
+    config_keys.push_back(SLAVE_SERVE_STALE_DATA);
+    config_keys.push_back(SLAVE_READ_ONLY);
+    config_keys.push_back(REPL_PING_SLAVE_PERIOD);
+    config_keys.push_back(REPL_TIMEOUT);
+    config_keys.push_back(REPL_DISABLE_TCP_NODELAY);
+    config_keys.push_back(REPL_BACKLOG_SIZE);
+    config_keys.push_back(REPL_BACKLOG_TTL);
+    config_keys.push_back(SLAVE_PRIORITY);
+    config_keys.push_back(MIN_SLAVES_TO_WRITE);
+    config_keys.push_back(MIN_SLAVES_MAX_LAG);
+    config_keys.push_back(REQUIRE_PASS);
+    config_keys.push_back(RENAME_COMMAND);
+    config_keys.push_back(MAX_CLIENTS);
+    config_keys.push_back(MAX_MEMORY);
+    config_keys.push_back(MAX_MEMORY_POLICY);
+    config_keys.push_back(MAX_MEMORY_SAMPLES);
+    config_keys.push_back(APPEND_ONLY);
+    config_keys.push_back(APPEND_FILENAME);
+    config_keys.push_back(APPEND_FSYNC);
+    config_keys.push_back(NO_APPEND_FSYNC_ON_REWRITE);
+    config_keys.push_back(AUTO_AOF_REWRITE_PERCENTAGE);
+    config_keys.push_back(AUTO_AOF_REWRITE_MIN_SIZE);
+    config_keys.push_back(LUA_TIME_LIMIT);
+    config_keys.push_back(SLOWLOG_LOG_SLOWER_THAN);
+    config_keys.push_back(SLOWLOG_MAX_LEN);
+    config_keys.push_back(NOTIFY_KEYSPACE_EVENTS);
+    config_keys.push_back(HASH_MAX_ZIP_LIST_ENTRIES);
+    config_keys.push_back(HASH_MAX_ZIP_LIST_VALUE);
+    config_keys.push_back(LIST_MAX_ZIP_LIST_ENTRIES);
+    config_keys.push_back(LIST_MAX_ZIP_LIST_VALUE);
+    config_keys.push_back(SET_MAX_INTSET_ENTRIES);
+    config_keys.push_back(ZSET_MAX_ZIP_LIST_ENTRIES);
+    config_keys.push_back(ZSET_MAX_ZIP_LIST_VALUE);
+    config_keys.push_back(ACTIVE_REHASHING);
+    config_keys.push_back(CLIENT_OUTPUT_BUFFER_LIMIT);
+    config_keys.push_back(HZ);
+    config_keys.push_back(AOF_REWRITE_INCREMENTAL_FSYNC);
+    return config_keys;
+}
 }}//end of nova::redis

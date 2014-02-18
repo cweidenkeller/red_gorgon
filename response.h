@@ -1,6 +1,7 @@
 #include <string>
+#include "constants.h"
 namespace nova { namespace redis {
-struct redis_response
+struct response
 /* This struct is used to represent responses from the redis server.
     * It returns the status. A predefined set of responses can be found in
     * redis_constants.h.
@@ -11,7 +12,7 @@ struct redis_response
     std::string status;
     std::string description;
     std::string data;
-    redis_response(std::string _status, std::string _data)
+    response(std::string _status, std::string _data)
     {
         status = _status;
         data = _data;
