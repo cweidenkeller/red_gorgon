@@ -1,6 +1,10 @@
 #include <string>
 #include <vector>
 namespace nova { namespace redis {
+static const std::string REDIS_ENABLE = "update-rc.d redis-server enable";
+static const std::string REDIS_DISABLE = "update-rc.d redis-server disable";
+static const std::string REDIS_STOP = "/etc/init.d/redis-server stop";
+static const std::string REDIS_START = "/etc/init.d/redis-server start";
 //Redis responses.
 static const std::string STRING_RESPONSE = "+";
 static const std::string STRING_DESCRIPTION = "String.";

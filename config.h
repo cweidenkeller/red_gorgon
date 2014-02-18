@@ -30,7 +30,7 @@ class Config
             {
                 return to_int(_options[key]);
             }
-            return -42;
+            return INT_NULL;
         }
         bool _get_bool_value(std::string key)
         {
@@ -48,7 +48,7 @@ class Config
             return NULL;
         }
     public:
-        RedisConfig(std::string config)
+        Config(std::string config)
         {
             std::string line;
             std::string value;
