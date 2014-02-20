@@ -1,7 +1,7 @@
 #include <string>
 #include "common.h"
 #include "connection.h"
-//#include "constants.h"
+#include "constants.h"
 #include "response.h"
 #include "commands.h"
 #include "control.h"
@@ -16,7 +16,9 @@ class Client
         std::string _port;
         std::string _host;
         std::string _client_name;
+        Config _config;
         Commands _commands;
+        Control _control;
         response _connect()
         {
             int retries = 0;
@@ -55,7 +57,7 @@ class Client
         }
         response _get_redis_response()
         {
-        /*
+           /*
             * Determine the response type from the redis server and return
             * A struct containing the response type as a string,
             * a string of its data and a description of the response type.
