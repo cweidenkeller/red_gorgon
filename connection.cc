@@ -1,3 +1,5 @@
+#ifndef CONNECTION_CC
+#define CONNECTION_CC
 namespace nova { namespace redis {
 namespace {
     void *get_in_addr(sockaddr *sa)
@@ -87,3 +89,4 @@ namespace {
         return data;
     }
 }}//end of nova::redis
+#endif /* CONNECTION_CC */

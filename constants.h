@@ -1,5 +1,7 @@
 #include <string>
 #include <vector>
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 namespace nova { namespace redis {
 static const std::string REDIS_ENABLE = "update-rc.d redis-server enable";
 static const std::string REDIS_DISABLE = "update-rc.d redis-server disable";
@@ -410,3 +412,4 @@ std::vector<std::string>get_config_key_vector()
     return config_keys;
 }
 }}//end of nova::redis
+#endif /* CONSTANTS_H */

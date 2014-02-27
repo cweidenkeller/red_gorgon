@@ -7,6 +7,8 @@
 #include <fstream>
 #include "constants.h"
 #include "common.h"
+#ifndef CONTROL_H
+#define CONTROL_H
 namespace nova { namespace redis {
 class Control
 {
@@ -82,3 +84,4 @@ class Control
         
 };
 }}
+#endif /* CONTROL_H */

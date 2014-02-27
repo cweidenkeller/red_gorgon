@@ -1,4 +1,6 @@
 #include <string>
+#ifndef COMMANDS_H
+#define COMMANDS_H
 namespace nova { namespace redis {
 class Commands
 {
@@ -100,3 +102,4 @@ class Commands
         }
 };
 }}//end nova::redis namespace
+#endif /* COMMANDS_H */

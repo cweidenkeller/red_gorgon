@@ -6,6 +6,8 @@
 #include "commands.h"
 #include "control.h"
 #include "config.h"
+#ifndef CLIENT_H
+#define CLIENT_H
 namespace nova { namespace redis {
 class Client
 {
@@ -335,3 +337,4 @@ class Client
         }
 };
 }}//end nova::redis namespace
+#endif /* CLIENT_H */

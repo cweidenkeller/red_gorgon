@@ -4,6 +4,8 @@
 #include <string>
 #include "constants.h"
 #include "common.h"
+#ifndef CONFIG_H
+#define CONFIG_H
 namespace nova { namespace redis {
 class Config
 {
@@ -369,3 +371,4 @@ class Config
         }
 };
 }}//end nova::redis
+#endif /* CONFIG_H */
