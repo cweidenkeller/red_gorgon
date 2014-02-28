@@ -18,9 +18,7 @@ class Client
         std::string _port;
         std::string _host;
         std::string _client_name;
-        Config _config;
         Commands _commands;
-        Control _control;
         response _connect()
         {
             int retries = 0;
@@ -74,7 +72,7 @@ class Client
             std::string multi_data = "";
             int retries = 0;
             std::string first_byte;
-            std::string response = "";
+            std::string res = "";
             if (_socket < 0)
             {
                 return response(STIMEOUT_DESCRIPTION, "");
@@ -103,27 +101,25 @@ class Client
                     {
                         return response(CTIMEOUT_RESPONSE, "");
                     }
-                    response += get_response(_socket, READ_LEN);
-                    if (response.length() == 0)
+                    res += get_response(_socket, READ_LEN);
+                    if (res.length() == 0)
                     {
                         ++retries;
                         continue;
                     }
-                    if (response.substr(response.length() - CRLF_LEN) ==
-                        CRLF)
+                    if (res.substr(res.length() - CRLF_LEN) == CRLF)
                     {
                         break;
                     }
                     ++retries;
                 }
-                if (response.substr(response.length() - CRLF_LEN) != CRLF)
+                if (res.substr(res.length() - CRLF_LEN) != CRLF)
                 {
                     return response(SERROR_RESPONSE, "");
                 }
                 return response(first_byte,
-                                        response.substr(
-                                            0, 
-                                            response.length() - 2));
+                                    res.substr(0, 
+                                               res.length() - 2));
             }
             else if (first_byte == MULTIPART_RESPONSE)
             {
