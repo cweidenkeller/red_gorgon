@@ -10,6 +10,6 @@ all: $(OBJS)
 	g++ -Wall test_config.cpp -o bin/test_config
 	g++ -Wall test_constants.cpp -o bin/test_constants
 	g++ -Wall test_control.cpp -o bin/test_control
-	cp test_redis.conf bin/test_redis.conf
+	cp etc/test_redis.conf bin/test_redis.conf
 clean:
 	rm -rf bin/
