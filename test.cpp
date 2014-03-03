@@ -5,7 +5,7 @@ using namespace std;
 using namespace nova::redis;
 int main(int argc, char* argv[])
 {
-    Client client = Client("localhost", "6379", "conrad");
+    Client client = Client("localhost", "6379", "conrad", "test_redis.conf");
     response res = client.ping();
     cout << res.status << " || "<< res.data << endl;
     res = client.bgsave();

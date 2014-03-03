@@ -9,11 +9,8 @@ class Commands
         std::string _config_get;
         std::string _config_rewrite;
         std::string _config_command;
-        std::string _redis_conf;
         void set_commands()
         {
-            _config_command = find_config_command();
-            password = find_password();
             if(_config_command.length() >= 1)
             {
                 std::string formatted_config;
@@ -34,24 +31,11 @@ class Commands
         }
     public:
         std::string password;
-        Commands()
+        Commands(std::string _password, std::string config_command)
         {
-            _redis_conf = DEFAULT_REDIS_CONFIG;
+            password = _password;
+            _config_command = config_command;
             set_commands();
-        }
-        Commands(std::string path)
-        {
-            _redis_conf = path;
-            set_commands();
-        }
-        std::string find_password()
-        {
-            password = "password";
-            return password;
-        }
-        std::string find_config_command()
-        {
-            return "";
         }
         std::string auth()
         {

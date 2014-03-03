@@ -327,6 +327,7 @@ static const std::string COMMAND_CLIENT_KILL = "CLIENT KILL";
 static const std::string COMMAND_CLIENT_LIST = "CLIENT LIST";
 static const std::string COMMAND_CLIENT_GETNAME = "CLIENT GETNAME";
 static const std::string COMMAND_CLIENT_SETNAME = "CLIENT SETNAME";
+static const std::string COMMAND_CLIENT = "CLIENT";
 static const std::string COMMAND_CONFIG_GET = "CONFIG GET";
 static const std::string COMMAND_CONFIG_REWRITE = "CONFIG REWRITE";
 static const std::string COMMAND_CONFIG_SET = "CONFIG SET";

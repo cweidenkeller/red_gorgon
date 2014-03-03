@@ -16,7 +16,8 @@ class Config
         std::vector<std::map <std::string, std::string> > _save;
         std::map<std::string, std::string> _slave_of;
         std::vector<std::map <std::string, std::string> > _renamed_commands;
-        std::vector<std::map <std::string, std::string> > _client_output_buffer_limit;
+        std::vector<std::map <std::string, std::string> > 
+            _client_output_buffer_limit;
         std::string _redis_config;
         std::string _get_string_value(std::string key)
         {
@@ -265,7 +266,7 @@ class Config
         {
             return _get_string_value(REQUIRE_PASS);
         }
-        std::vector<std::map <std::string, std::string> >get_renamed_commands()
+        std::vector<std::map <std::string, std::string> > get_renamed_commands()
         {
             return _renamed_commands;
         }
@@ -357,7 +358,8 @@ class Config
         {
             return _get_bool_value(ACTIVE_REHASHING);
         }
-        std::vector<std::map <std::string, std::string> >get_client_output_buffer_limit()
+        std::vector<std::map <std::string, std::string> >
+            get_client_output_buffer_limit()
         {
             return _client_output_buffer_limit;
         }

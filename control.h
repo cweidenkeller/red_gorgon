@@ -58,7 +58,26 @@ class Control
         {
             return system(REDIS_ENABLE.c_str());
         }
-
+        int get_pid()
+        {
+            std::string line = "";
+            std::string data = "";
+            std::ifstream pfile(_pid_file.c_str());
+            if (!pfile.is_open())
+            {
+                return -1;
+            }
+            while (std::getline(pfile, line))
+            {
+                data += line;
+            }
+            pfile.close();
+            if (data.length() <= 0)
+            {
+                return -1;
+            }
+            return to_int(data);
+        }
     private:
         std::string _pid_file;
         int _get_pid()
@@ -81,7 +100,6 @@ class Control
             }
             return to_int(data);
         }
-        
 };
 }}
 #endif /* CONTROL_H */

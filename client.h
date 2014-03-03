@@ -18,6 +18,8 @@ class Client
         std::string _port;
         std::string _host;
         std::string _client_name;
+        std::string _config_file;
+        std::string _config_command;
         Commands _commands;
         response _connect()
         {
@@ -96,7 +98,7 @@ class Client
                 first_byte == INTEGER_RESPONSE)
             {
                 while (true)
-                {                        
+                {
                     if (retries == MAX_RETRIES)
                     {
                         return response(CTIMEOUT_RESPONSE, "");
@@ -118,7 +120,7 @@ class Client
                     return response(SERROR_RESPONSE, "");
                 }
                 return response(first_byte,
-                                    res.substr(0, 
+                                    res.substr(0,
                                                res.length() - 2));
             }
             else if (first_byte == MULTIPART_RESPONSE)
@@ -159,13 +161,13 @@ class Client
                                         3);
                     }
                     else
-                    { 
+                    {
                         get_response(_socket, 2);
                     }
                     --multi_args;
                 }
                 return response(MULTIPART_RESPONSE,
-                                        multi_data);   
+                                        multi_data);
             }
             else
             {
@@ -180,7 +182,7 @@ class Client
                     _commands.client_set_name(_client_name));
                 if (res.status != CMESSAGE_SENT_RESPONSE)
                 {
-                    return res; 
+                    return res;
                 }
                 res = _get_redis_response();
                 if (res.status == STRING_RESPONSE)
@@ -247,12 +249,34 @@ class Client
             }
             return response(CCONNECTED_RESPONSE, "");
         }
+        void _find_config_command()
+        {
+            for (int i=0; i < config.get_renamed_commands().size(); i++)
+            {
+                if (config.get_renamed_commands()[i][RENAMED_COMMAND] ==
+                    COMMAND_CLIENT)
+                {
+                    _config_command =
+                        config.get_renamed_commands()[i][NEW_COMMAND_NAME];
+                }
+            }
+            _config_command = COMMAND_CLIENT;
+        }
     public:
-        Client(std::string host, std::string port, std::string client_name)
+        Control control;
+        Config config;
+        Client(std::string host, std::string port, std::string client_name,
+               std::string config_file)
         {
             _host = host;
             _port = port;
             _client_name = client_name;
+            _config_file = config_file;
+            config(config_file);
+            _find_config_command();
+            _commands(config.get_require_pass(),
+                      _config_command);
+            control(config.get_pid_file():
             _authed = false;
             _name_set = false;
             _socket = -1;
