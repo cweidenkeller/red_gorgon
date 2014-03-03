@@ -16,7 +16,7 @@ class Config
         std::vector<std::map <std::string, std::string> > _save;
         std::map<std::string, std::string> _slave_of;
         std::vector<std::map <std::string, std::string> > _renamed_commands;
-        std::vector<std::map <std::string, std::string> > 
+        std::vector<std::map <std::string, std::string> >
             _client_output_buffer_limit;
         std::string _redis_config;
         std::string _get_string_value(std::string key)
@@ -128,7 +128,7 @@ class Config
                 }
             }
             rconfig.close();
-            
+
         }
         std::vector<std::string> get_include_files()
         {
