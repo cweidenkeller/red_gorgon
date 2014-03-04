@@ -14,7 +14,7 @@ namespace {
 
     int get_socket(std::string host, std::string port)
     {
-        int sockfd, rv; 
+        int sockfd, rv;
         struct addrinfo hints, *servinfo, *p;
         char s[INET6_ADDRSTRLEN];
         memset(&hints, 0, sizeof hints);

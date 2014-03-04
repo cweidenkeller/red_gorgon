@@ -56,7 +56,7 @@ static const std::string SAVE_COMMAND  = "*1\r\n$4\r\nSAVE\r\n";
 static const std::string LAST_SAVE_COMMAND = "*1\r\n$8\r\nLASTSAVE\r\n";
 static const std::string CLIENT_SET_COMMAND = "*3\r\n$6\r\nCLIENT\r\n$7\r\n"
                                                 "SETNAME\r\n";
-static const std::string CONFIG_SET_COMMAND = "*4\r\n$6\r\nCONFIG\r\n$3\r\n" 
+static const std::string CONFIG_SET_COMMAND = "*4\r\n$6\r\nCONFIG\r\n$3\r\n"
                                                 "SET\r\n";
 static const std::string CONFIG_GET_COMMAND = "*3\r\n$6\r\nCONFIG\r\n$3\r\n"
                                                 "GET\r\n";
@@ -304,7 +304,7 @@ static const std::string COMMAND_UNSUBSCRIBE = "UNSUBSCRIBE";
 //Redis transaction command names.
 static const std::string COMMAND_DISCARD = "DISCARD";
 static const std::string COMMAND_EXEC = "EXEC";
-static const std::string COMMAND_MULTI = "MULTI"; 
+static const std::string COMMAND_MULTI = "MULTI";
 static const std::string COMMAND_UNWATCH = "UNWATCH";
 static const std::string COMMAND_WATCH = "WATCH";
 //Redis scripting command namees.

@@ -10,6 +10,5 @@ int main()
     std::cout << conf.get_include_files().size() << std::endl;
     std::cout << conf.get_include_files()[0] << std::endl;
     std::cout << conf.get_include_files()[1] << std::endl;
-    std::cout << conf.get_log_file() << std::endl;
-    
+    std::cout << conf.get_log_file() << std::endl; 
 }

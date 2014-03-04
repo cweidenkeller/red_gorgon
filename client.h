@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "common.h"
 #include "connection.h"
 #include "constants.h"
@@ -259,6 +260,7 @@ class Client
                         config->get_renamed_commands()[i][NEW_COMMAND_NAME];
                 }
             }
+            std::cout << _config_command << " CONFIG COMMAND NAME~!" << std::endl;
             _config_command = COMMAND_CLIENT;
         }
     public:
