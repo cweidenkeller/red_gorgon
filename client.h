@@ -20,7 +20,7 @@ class Client
         std::string _client_name;
         std::string _config_file;
         std::string _config_command;
-        Commands _commands;
+        Commands*_commands;
         response _connect()
         {
             int retries = 0;
@@ -179,7 +179,7 @@ class Client
             if (!_name_set)
             {
                 response res = _send_redis_message(
-                    _commands.client_set_name(_client_name));
+                    _commands->client_set_name(_client_name));
                 if (res.status != CMESSAGE_SENT_RESPONSE)
                 {
                     return res;
@@ -195,9 +195,9 @@ class Client
         }
         response _auth()
         {
-            if (_commands.password.length() > 0 && !_authed)
+            if (_commands->password.length() > 0 && !_authed)
             {
-                response res = _send_redis_message(_commands.auth());
+                response res = _send_redis_message(_commands->auth());
                 if (res.status != CMESSAGE_SENT_RESPONSE)
                 {
                     return res;
@@ -205,8 +205,7 @@ class Client
                 res = _get_redis_response();
                 if (res.status == ERROR_RESPONSE)
                 {
-                    _commands.find_password();
-                    res = _send_redis_message(_commands.auth());
+                    res = _send_redis_message(_commands->auth());
                     if (res.status != CMESSAGE_SENT_RESPONSE)
                     {
                         return res;
@@ -251,20 +250,20 @@ class Client
         }
         void _find_config_command()
         {
-            for (int i=0; i < config.get_renamed_commands().size(); i++)
+            for (int i=0; i < config->get_renamed_commands().size(); i++)
             {
-                if (config.get_renamed_commands()[i][RENAMED_COMMAND] ==
+                if (config->get_renamed_commands()[i][RENAMED_COMMAND] ==
                     COMMAND_CLIENT)
                 {
                     _config_command =
-                        config.get_renamed_commands()[i][NEW_COMMAND_NAME];
+                        config->get_renamed_commands()[i][NEW_COMMAND_NAME];
                 }
             }
             _config_command = COMMAND_CLIENT;
         }
     public:
-        Control control;
-        Config config;
+        Control* control;
+        Config* config;
         Client(std::string host, std::string port, std::string client_name,
                std::string config_file)
         {
@@ -272,11 +271,11 @@ class Client
             _port = port;
             _client_name = client_name;
             _config_file = config_file;
-            config(config_file);
+            config = new Config(config_file);
             _find_config_command();
-            _commands(config.get_require_pass(),
-                      _config_command);
-            control(config.get_pid_file():
+            _commands = new Commands(config->get_require_pass(),
+                                     _config_command);
+            control = new Control(config->get_pidfile());
             _authed = false;
             _name_set = false;
             _socket = -1;
@@ -290,7 +289,7 @@ class Client
         }
         response ping()
         {
-            response res = _send_redis_message(_commands.ping());
+            response res = _send_redis_message(_commands->ping());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
@@ -299,7 +298,7 @@ class Client
         }
         response bgsave()
         {
-            response res = _send_redis_message(_commands.bgsave());
+            response res = _send_redis_message(_commands->bgsave());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
@@ -308,7 +307,7 @@ class Client
         }
         response save()
         {
-            response res = _send_redis_message(_commands.save());
+            response res = _send_redis_message(_commands->save());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
@@ -318,7 +317,7 @@ class Client
         response last_save()
         {
             response res = _send_redis_message(
-                _commands.last_save());
+                _commands->last_save());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
@@ -328,7 +327,7 @@ class Client
         response config_get(std::string name)
         {
             response res = _send_redis_message(
-                _commands.config_get(name));
+                _commands->config_get(name));
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
@@ -338,7 +337,7 @@ class Client
         response config_set(std::string name, std::string value)
         {
             response res = _send_redis_message(
-                _commands.config_set(name, value));
+                _commands->config_set(name, value));
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
@@ -348,7 +347,7 @@ class Client
         response config_rewrite()
         {
             response res = _send_redis_message(
-                _commands.config_rewrite());
+                _commands->config_rewrite());
             if (res.status != CMESSAGE_SENT_RESPONSE)
             {
                 return res;
