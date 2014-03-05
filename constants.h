@@ -3,10 +3,12 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 namespace nova { namespace redis {
-static const std::string REDIS_ENABLE = "update-rc.d redis-server enable";
-static const std::string REDIS_DISABLE = "update-rc.d redis-server disable";
-static const std::string REDIS_STOP = "/etc/init.d/redis-server stop";
-static const std::string REDIS_START = "/etc/init.d/redis-server start";
+static const std::string REDIS_ENABLE = "sudo update-rc.d redis-server enable";
+static const std::string REDIS_DISABLE = "sudo update-rc.d redis-server disable";
+static const std::string REDIS_STOP = "sudo /etc/init.d/redis-server stop";
+static const std::string REDIS_START = "sudo /etc/init.d/redis-server start";
+static const std::string INSTALL_PKG = "sudo apt-get install ";
+static const std::string UNINSTALL_PKG = "sudo apt-get remove ";
 //Redis responses.
 static const std::string STRING_RESPONSE = "+";
 static const std::string STRING_DESCRIPTION = "String.";
@@ -39,6 +41,9 @@ static const std::string CNOTHING_TO_DO_DESCRIPTION = "No command sent "
                                                         "nothing to do.";
 //Client options.
 static const std::string DEFAULT_REDIS_CONFIG = "/etc/redis/redis.conf";
+static const std::string REDIS_PORT = "6379";
+static const std::string REDIS_AGENT_NAME = "trove-guestagent";
+static const std::string SOCKET_NAME = "localhost";
 static const std::string CRLF = "\r\n";
 static const int CRLF_LEN = 2;
 static const int SOCK_ERROR = -1;
@@ -332,6 +337,7 @@ static const std::string COMMAND_CONFIG_GET = "CONFIG GET";
 static const std::string COMMAND_CONFIG_REWRITE = "CONFIG REWRITE";
 static const std::string COMMAND_CONFIG_SET = "CONFIG SET";
 static const std::string COMMAND_CONFIG_RESETSTAT = "CONFIG RESETSTAT";
+static const std::string COMMAND_CONFIG = "CONFIG";
 static const std::string COMMAND_DBSIZE = "DBSIZE";
 static const std::string COMMAND_DEBUG_OBJECT = "DEBUG OBJECT";
 static const std::string COMMAND_DEBUG_SEGFAULT = "DEBUG SEGFAULT";

@@ -1,0 +1,3 @@
+exe test_client
+    : test_client.cpp
+    ;

@@ -58,6 +58,14 @@ class Control
         {
             return system(REDIS_ENABLE.c_str());
         }
+        int install(std::string pkg_name)
+        {
+            return system((INSTALL_PKG + pkg_name).c_str());
+        }
+        int uninstall(std::string pkg_name)
+        {
+            return system((UNINSTALL_PKG + pkg_name).c_str());
+        }
         int get_pid()
         {
             std::string line = "";

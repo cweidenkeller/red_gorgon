@@ -11,6 +11,12 @@
 #define CLIENT_H
 namespace nova { namespace redis {
 class Client
+    /*
+     * This is the redis Client class it handles all communication
+     * and process control of a redis instance.
+     * This object is thread safe and handles closing
+     * of any open file descriptors or sockets on deconstruction.
+     */
 {
     private:
         bool _authed;
@@ -22,6 +28,10 @@ class Client
         std::string _config_file;
         std::string _config_command;
         Commands*_commands;
+        /*
+         * Connects to the redis server using nova::redis::get_socket.
+         * found
+         */
         response _connect()
         {
             int retries = 0;
@@ -254,14 +264,12 @@ class Client
             for (int i=0; i < config->get_renamed_commands().size(); i++)
             {
                 if (config->get_renamed_commands()[i][RENAMED_COMMAND] ==
-                    COMMAND_CLIENT)
+                    COMMAND_CONFIG)
                 {
                     _config_command =
                         config->get_renamed_commands()[i][NEW_COMMAND_NAME];
                 }
             }
-            std::cout << _config_command << " CONFIG COMMAND NAME~!" << std::endl;
-            _config_command = COMMAND_CLIENT;
         }
     public:
         Control* control;
@@ -271,6 +279,7 @@ class Client
         {
             _host = host;
             _port = port;
+            _config_command = COMMAND_CONFIG;
             _client_name = client_name;
             _config_file = config_file;
             config = new Config(config_file);
