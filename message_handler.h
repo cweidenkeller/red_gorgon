@@ -20,11 +20,11 @@ class RedisMessageHandler
         }
         void _remove_overrides()
         {
-            a;
+            std::string a;
         }
         void _reset_configuration()
         {
-            a;
+            std::string a;
         }
         void _stop_db()
         {
@@ -32,23 +32,23 @@ class RedisMessageHandler
         }
         void _update_overrides()
         {
-            a;
+            std::string a;
         }
         void _mount_volume()
         {
-            a;
+            std:: string a;
         }
         void _unmount_volume()
         {
-            a;
+            std::string a;
         }
         void _resize_fs()
         {
-            a;
+            std::string a;
         }
         void _apply_overrides()
         {
-            a;
+            std::string a;
         }
         void _change_passwords()
         {
@@ -57,7 +57,7 @@ class RedisMessageHandler
     public:
         RedisMessageHandler()
         {
-           _client = new Client(SOCKET_NAME, 
+           _client = new Client(SOCKET_NAME,
                                 REDIS_PORT,
                                 AGENT_NAME,
                                 DEFAULT_REDIS_CONFIG);
