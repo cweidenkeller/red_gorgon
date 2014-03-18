@@ -1,4 +1,5 @@
 #include <string>
+#include "constants.h"
 #ifndef COMMANDS_H
 #define COMMANDS_H
 namespace nova { namespace redis {
